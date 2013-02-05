@@ -1,8 +1,11 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+
 from django.contrib.auth.models import (
     BaseUserManager, AbstractBaseUser, PermissionsMixin
 )
+
+from model_utils import fields
 
 
 class UserManager(BaseUserManager):
@@ -57,6 +60,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
+
+    created = fields.AutoCreatedField(_('created'))
+    modified = fields.AutoLastModifiedField(_('modified'))
 
     objects = UserManager()
 

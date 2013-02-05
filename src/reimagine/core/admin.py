@@ -62,7 +62,7 @@ class CoreUserAdmin(UserAdmin):
     form = UserChangeForm
 
     # The fields to be used in displaying the User model.
-    list_display = ('email', 'is_staff', 'screen_name')
+    list_display = ('email', 'is_staff', 'screen_name', 'created', 'modified')
     list_filter = ('is_staff', 'is_superuser', 'is_active', 'groups')
     search_fields = ('email', 'screen_name')
     ordering = ('email',)
@@ -72,7 +72,7 @@ class CoreUserAdmin(UserAdmin):
         ('Personal Info', {'fields': ('screen_name',)}),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser',
             'groups', 'user_permissions',)}),
-        ('Important dates', {'fields': ('last_login',)}),
+        ('Important dates', {'fields': ('last_login', )}),
     )
     add_fieldsets = (
         (None, {
