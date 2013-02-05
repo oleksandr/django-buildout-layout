@@ -1,0 +1,70 @@
+daemon off;
+worker_processes  5;
+
+events {
+    worker_connections  1024;
+}
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for"';
+
+    sendfile        on;
+
+    keepalive_timeout  65;
+
+    gzip  on;
+
+    gzip_comp_level 2;
+    gzip_proxied    any;
+    gzip_types      text/plain text/css application/x-javascript text/xml application/xml application/xml+rss text/javascript;
+
+    server {
+        listen       ${project:port-http};
+        listen       ${project:port-https} ssl;
+        server_name  ${project:host};
+        client_max_body_size ${project:max-upload-size};
+
+        ssl_certificate ${buildout:directory}/etc/nginx/server.crt;
+        ssl_certificate_key ${buildout:directory}/etc/nginx/server.key;
+
+        location / {
+            root   html;
+            index  index.html index.htm;
+        }
+
+        location /upload {
+            upload_pass @backend;
+
+            upload_pass_args on;
+            upload_store ${project:uploads-store-path} 1;
+            upload_store_access user:r;
+            upload_cleanup 400 404 499 500-505;
+
+            # Set specified fields in request body
+            upload_set_form_field $upload_field_name.name "$upload_file_name";
+            upload_set_form_field $upload_field_name.content_type "$upload_content_type";
+            upload_set_form_field $upload_field_name.path "$upload_tmp_path";
+
+            # Inform backend about hash and size of a file
+            upload_aggregate_form_field $upload_field_name.md5 "$upload_file_md5";
+            upload_aggregate_form_field $upload_field_name.size "$upload_file_size";
+
+            #upload_pass_form_field "^submit$|^description$";
+        }
+
+        location @backend {
+            proxy_pass   http://${project:uploads-backend-addr};
+        }
+
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
+        }
+
+    }
+}

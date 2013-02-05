@@ -1,0 +1,15 @@
+# Buildout generated
+bin/
+etc/
+develop-eggs/
+eggs/
+parts/
+var/
+.installed.cfg
+
+# Python / Logs
+*.pyc
+*.log
+
+# Locally generated configuration
+src/reimagine/settings_local.py
