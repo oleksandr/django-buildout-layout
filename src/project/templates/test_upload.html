@@ -1,0 +1,23 @@
+<html>
+<head>
+<title>Test upload</title>
+</head>
+<body>
+
+<h1><h1>Example File Uploads Handling Backend</h1>
+<p>Try to upload several files and see the generated JSON response that contains fields passed to 
+your backend by nginx upload module after actual upload handling.</p>
+
+<h2>Select files to upload</h2>
+<form enctype="multipart/form-data" action="/upload" method="post">
+<input type="file" name="file1"><br>
+<input type="file" name="file2"><br>
+<input type="file" name="file3"><br>
+<input type="file" name="file4"><br>
+<input type="file" name="file5"><br>
+<input type="file" name="file6"><br>
+<input type="submit" name="submit" value="Upload">
+<input type="hidden" name="test" value="value">
+</form>
+</body>
+</html>
