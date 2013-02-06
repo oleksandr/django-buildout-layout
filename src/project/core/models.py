@@ -11,7 +11,7 @@ from model_utils import fields
 class UserManager(BaseUserManager):
     def create_user(self, email, screen_name, password=None):
         """
-        Creates and saves a User with the given email and password
+        Creates and saves a User with the given email and password.
         """
         if not email:
             msg = _('Users must have an email address')
