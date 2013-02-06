@@ -35,14 +35,14 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    '${buildout:directory}/src/reimagine/assets',
+    '${buildout:directory}/src/project/assets',
 )
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    '${buildout:directory}/src/reimagine/templates',
+    '${buildout:directory}/src/project/templates',
 )
 
 AUTH_USER_MODEL = 'core.User'
@@ -61,6 +61,6 @@ INSTALLED_APPS = (
     'gunicorn',
     'south',
     'django_extensions',
-    'reimagine',
-    'reimagine.core',
+    'project',
+    'project.core',
 )

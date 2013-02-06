@@ -12,4 +12,4 @@ var/
 *.log
 
 # Locally generated configuration
-src/reimagine/settings_local.py
+src/project/settings_local.py

@@ -1,4 +1,4 @@
-ReImagine
+Project
 ===================
 
 Project layout is based on the file-uploads-server buildout layout:
