@@ -24,10 +24,10 @@ http {
     gzip_types      text/plain text/css application/x-javascript text/xml application/xml application/xml+rss text/javascript;
 
     server {
-        listen       ${project:port-http};
-        listen       ${project:port-https} ssl;
-        server_name  ${project:host};
-        client_max_body_size ${project:max-upload-size};
+        listen       ${project-env:port-http};
+        listen       ${project-env:port-https} ssl;
+        server_name  ${project-env:host};
+        client_max_body_size ${project-env:max-upload-size};
 
         ssl_certificate ${buildout:directory}/etc/nginx/server.crt;
         ssl_certificate_key ${buildout:directory}/etc/nginx/server.key;
@@ -41,7 +41,7 @@ http {
             upload_pass @backend;
 
             upload_pass_args on;
-            upload_store ${project:uploads-store-path} 1;
+            upload_store ${project-env:uploads-store-path} 1;
             upload_store_access user:r;
             upload_cleanup 400 404 499 500-505;
 
@@ -58,7 +58,7 @@ http {
         }
 
         location @backend {
-            proxy_pass   http://${project:uploads-backend-addr};
+            proxy_pass   http://${project-env:uploads-backend-addr};
         }
 
         error_page   500 502 503 504  /50x.html;
