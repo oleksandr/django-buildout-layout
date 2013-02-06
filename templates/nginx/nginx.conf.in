@@ -32,9 +32,12 @@ http {
         ssl_certificate ${buildout:directory}/etc/nginx/server.crt;
         ssl_certificate_key ${buildout:directory}/etc/nginx/server.key;
 
-        location / {
-            root   html;
-            index  index.html index.htm;
+        # https://docs.djangoproject.com/en/dev/howto/static-files/#serving-static-files-in-production
+        location /static/ { # STATIC_URL
+            alias ${buildout:directory}/var/static/; # STATIC_ROOT
+            if ($query_string) {
+                expires max;
+            }
         }
 
         location /upload {
@@ -54,7 +57,20 @@ http {
             upload_aggregate_form_field $upload_field_name.md5 "$upload_file_md5";
             upload_aggregate_form_field $upload_field_name.size "$upload_file_size";
 
-            #upload_pass_form_field "^submit$|^description$";
+            upload_pass_form_field "^submit$|^description$";
+        }
+
+        location / {
+            #root   html;
+            #index  index.html index.htm;
+            proxy_pass_header Server;
+            proxy_set_header Host $http_host;
+            proxy_redirect off;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Scheme $scheme;
+            proxy_connect_timeout 10;
+            proxy_read_timeout 10;
+            proxy_pass http://${project-env:backend-addr};
         }
 
         location @backend {
