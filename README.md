@@ -65,10 +65,10 @@ Now start the services with supervisord command and check their status:
     nginx                            RUNNING    pid 54958, uptime 0:00:02
     watchmedo                        RUNNING    pid 54960, uptime 0:00:02
 
-As you can see we have a *backend& process running, which is a Django application served via gunicorn.
+As you can see we have a *backend* process running, which is a Django application served via gunicorn.
 The *nginx* process is a web-frontend that proxies requests to *backend* and handles the uploads using
 a nginx uploads module (<http://www.grid.net.ru/nginx/upload.en.html>).
-The *watchmedo* process is listening to changes in the <root>/src/project folder for *.py changes and 
+The *watchmedo* process is listening for changes in the <root>/src/project folder filtering *.py files and
 restarts the backend if the code if modified. In this way we have a *reloadable* behavior of Django's *runserver*
 command.
 
@@ -77,6 +77,6 @@ Of course you need to initialize your Django application:
     $ bin/django syncdb
     $ bin/django migrate
 
-And then open the following link in your browser to access your application: <http://localhost:8080> 
+And then open the following link in your browser to access your application: <http://localhost:8080>
 Additionally the SSL support is configured for your application if required: <https://localhost:8443>
 
