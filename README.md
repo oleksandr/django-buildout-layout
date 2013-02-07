@@ -10,13 +10,15 @@ lots of initial deployment pains and have more chances to roll back your release
 
 After several projects this layout has been generalized and shared here as a hopefully good practice to be re-used in my projects and hopefully by someone else as well.
 
-**Assumtions**
+**Assumptions**
 * You have Postgres installed (in fact the layout does not depend on it, configurable)
 * Python / Django 1.5 (this layout include 1.5c1 included in the download cache)
 * gunicorn as WSGI-server
-* nginx as uploads handler and as a web front-end (proxy)
+* nginx as uploads handler and as a web-frontend (proxy)
 * Supervisor for processes orchestration
 
+*NB: You can still use virtualenv and completely isolate from your system, but this is not necessary.
+A buildout will take care of this.*
 
 Development Installation
 -------------
@@ -31,29 +33,51 @@ Typical buildout procedure:
     $ touch buildout.cfg
     $ nano buildout.cfg
 
-Specify the following in the buildout.cfg:
+Specify the following in the buildout.cfg (this will inherit from the development profile):
 
     [buildout]
     extends = profiles/development.cfg
 
-Run the buildout:
+Additionally you need to extend the *project-env* section in buildout.cfg to override the settings specific for your machine.
+Do not modify the original configuration files. Just include the corresponding section in the buildout.cfg you've jsut created:
+
+    [project-env]
+    db-host = <host of your db>
+    db-port = <your custom port>
+    db-user = <your custom user>
+    db-pass = <your password>
+    db-name = <name of your database>
+    django-debug = True
+
+Create the buildout directory structure (initialize buildout):
+
+    $ python boostrap.py
+
+This will created a standard buildout directory structure. Now it's time to run the buildout:
 
     $ bin/buildout -D
 
-TODO: Describe the layout.
+After the successful execution of this command you should have a working development environment.
+Now start the services with supervisord command and check their status:
 
-Running
--------------
+    $ bin/supervisord
+    $ bin/supervisorctl status
+    backend                          RUNNING    pid 54959, uptime 0:00:02
+    nginx                            RUNNING    pid 54958, uptime 0:00:02
+    watchmedo                        RUNNING    pid 54960, uptime 0:00:02
 
-You can run directly 'bin/django runserver' command or the full pack of services (similar how it goes in production) using 'bin/supervisord' command.
+As you can see we have a *backend& process running, which is a Django application served via gunicorn.
+The *nginx* process is a web-frontend that proxies requests to *backend* and handles the uploads using
+a nginx uploads module (<http://www.grid.net.ru/nginx/upload.en.html>).
+The *watchmedo* process is listening to changes in the <root>/src/project folder for *.py changes and 
+restarts the backend if the code if modified. In this way we have a *reloadable* behavior of Django's *runserver*
+command.
 
-TODO: Provide examples.
+Of course you need to initialize your Django application:
 
-Adding project dependencies
--------------
+    $ bin/django syncdb
+    $ bin/django migrate
 
-Described where to add the eggs, etc.
+And then open the following link in your browser to access your application: <http://localhost:8080> 
+Additionally the SSL support is configured for your application if required: <https://localhost:8443>
 
-
-
--------------
