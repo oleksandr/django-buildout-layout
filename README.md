@@ -29,7 +29,6 @@ to manage your local Postgres installation.
 
 Typical buildout procedure:
 
-    $ python bootstrap.py
     $ touch buildout.cfg
     $ nano buildout.cfg
 
@@ -39,7 +38,7 @@ Specify the following in the buildout.cfg (this will inherit from the developmen
     extends = profiles/development.cfg
 
 Additionally you need to extend the *project-env* section in buildout.cfg to override the settings specific for your machine.
-Do not modify the original configuration files. Just include the corresponding section in the buildout.cfg you've jsut created:
+Do not modify the original configuration files. Just include the corresponding section in the buildout.cfg you've just created:
 
     [project-env]
     db-host = <host of your db>
