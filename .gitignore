@@ -7,6 +7,9 @@ parts/
 var/
 .installed.cfg
 
+# This is created by user locally
+buildout.cfg
+
 # Python / Logs
 *.pyc
 *.log
