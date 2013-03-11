@@ -12,7 +12,7 @@ After several projects this layout has been generalized and shared here as a hop
 
 **Assumptions**
 * You have Postgres installed (in fact the layout does not depend on it, configurable)
-* Python / Django 1.5 (this layout include 1.5c1 included in the download cache)
+* Python / Django 1.5
 * gunicorn as WSGI-server
 * nginx as uploads handler and as a web-frontend (proxy)
 * Supervisor for processes orchestration
